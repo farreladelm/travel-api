@@ -7,7 +7,6 @@ use App\Models\Travel;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AdminTourTest extends TestCase
@@ -17,7 +16,7 @@ class AdminTourTest extends TestCase
     public function test_public_user_cannot_access_add_new_tour(): void
     {
         $travel = Travel::factory()->create();
-        $response = $this->postJson('/api/v1/admin/travels/' . $travel->id . '/tours');
+        $response = $this->postJson('/api/v1/admin/travels/'.$travel->id.'/tours');
 
         $response->assertStatus(401);
     }
@@ -30,7 +29,7 @@ class AdminTourTest extends TestCase
 
         $travel = Travel::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/api/v1/admin/travels/' . $travel->id . '/tours');
+        $response = $this->actingAs($user)->postJson('/api/v1/admin/travels/'.$travel->id.'/tours');
 
         $response->assertStatus(403);
     }
@@ -43,13 +42,13 @@ class AdminTourTest extends TestCase
 
         $travel = Travel::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/api/v1/admin/travels/' . $travel->id . '/tours', [
-            'name' => 'new tour'
+        $response = $this->actingAs($user)->postJson('/api/v1/admin/travels/'.$travel->id.'/tours', [
+            'name' => 'new tour',
         ]);
 
         $response->assertStatus(422);
 
-        $response = $this->actingAs($user)->postJson('/api/v1/admin/travels/' . $travel->id . '/tours', [
+        $response = $this->actingAs($user)->postJson('/api/v1/admin/travels/'.$travel->id.'/tours', [
             'name' => 'new tour',
             'starting_date' => '2023-01-12',
             'ending_date' => '2023-01-14',
@@ -58,7 +57,7 @@ class AdminTourTest extends TestCase
 
         $response->assertStatus(201);
 
-        $response = $this->get('/api/v1/travels/' . $travel->slug . '/tours');
+        $response = $this->get('/api/v1/travels/'.$travel->slug.'/tours');
 
         $response->assertJsonFragment(['name' => 'new tour']);
     }

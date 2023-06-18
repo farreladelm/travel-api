@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\Tour;
 use App\Models\Travel;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ToursListTest extends TestCase
 {
@@ -17,7 +16,7 @@ class ToursListTest extends TestCase
         $travel = Travel::factory()->create();
         $tour = Tour::factory()->create(['travel_id' => $travel->id]);
 
-        $response = $this->get('api/v1/travels/' . $travel->slug . '/tours');
+        $response = $this->get('api/v1/travels/'.$travel->slug.'/tours');
 
         $response->assertStatus(200);
         $response->assertJsonCount(1, 'data');
@@ -32,7 +31,7 @@ class ToursListTest extends TestCase
             'price' => 123.45,
         ]);
 
-        $response = $this->get('api/v1/travels/' . $travel->slug . '/tours');
+        $response = $this->get('api/v1/travels/'.$travel->slug.'/tours');
 
         $response->assertStatus(200);
         $response->assertJsonCount(1, 'data');
@@ -44,8 +43,7 @@ class ToursListTest extends TestCase
         $travel = Travel::factory()->create();
         Tour::factory(16)->create(['travel_id' => $travel->id]);
 
-
-        $response = $this->get('api/v1/travels/' . $travel->slug . '/tours');
+        $response = $this->get('api/v1/travels/'.$travel->slug.'/tours');
 
         $response->assertStatus(200);
         $response->assertJsonCount(15, 'data');
@@ -66,7 +64,7 @@ class ToursListTest extends TestCase
             'ending_date' => now()->addDays(1),
         ]);
 
-        $response = $this->get('api/v1/travels/' . $travel->slug . '/tours');
+        $response = $this->get('api/v1/travels/'.$travel->slug.'/tours');
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.0.id', $erlierTour->id);
@@ -93,7 +91,7 @@ class ToursListTest extends TestCase
             'ending_date' => now()->addDays(1),
         ]);
 
-        $response = $this->get('api/v1/travels/' . $travel->slug . '/tours?sortBy=price&sortOrder=asc');
+        $response = $this->get('api/v1/travels/'.$travel->slug.'/tours?sortBy=price&sortOrder=asc');
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.0.id', $CheapErlierTour->id);
